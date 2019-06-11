@@ -16,49 +16,51 @@
 				<button class="cu-btn round mr-3" :class="calculationOptions==3?active:inactive" @tap="calculationOptions=3">定投总时长</button>
 			</view>
 		</view>
-		
-		<view v-if="calculationOptions!=2" class="cu-form-group">
-			<view class="title">
-				每期定投金额
+
+		<view class="border-bottom">
+			<view v-if="calculationOptions!=2" class="cu-form-group">
+				<view class="title">
+					每期定投金额
+				</view>
+				<input placeholder="请输入" v-model="fixedMoney" type="digit"></input>
+				<view class="action">
+					<text>元</text>
+				</view>
 			</view>
-			<input placeholder="请输入" v-model="fixedMoney" type="digit"></input>
-			<view class="action">
-				<text>元</text>
+			<view v-show="calculationOptions!=3" class="cu-form-group">
+				<view class="title">
+					总定投时长
+				</view>
+				<input placeholder="请输入" v-model="fixedTime" type="digit"></input>
+				<view class="action">
+					<text>年</text>
+				</view>
 			</view>
-		</view>
-		<view v-show="calculationOptions!=3" class="cu-form-group">
-			<view class="title">
-				总定投时长
+			<view class="cu-form-group">
+				<view class="title">
+					定投周期
+				</view>
+				<button class="cu-btn round mr-3" :class="period==0?active:inactive" @tap="period=0">周</button>
+				<button class="cu-btn round mr-3" :class="period==1?active:inactive" @tap="period=1">两周</button>
+				<button class="cu-btn round mr-3" :class="period==2?active:inactive" @tap="period=2">月</button>
 			</view>
-			<input placeholder="请输入" v-model="fixedTime" type="digit"></input>
-			<view class="action">
-				<text>年</text>
+			<view v-show="calculationOptions!=1" class="cu-form-group">
+				<view class="title">
+					目标年复合收益率
+				</view>
+				<input placeholder="请输入" v-model="expectInterest" type="digit"></input>
+				<view class="action">
+					<text>%</text>
+				</view>
 			</view>
-		</view>
-		<view class="cu-form-group">
-			<view class="title">
-				定投周期
-			</view>
-			<button class="cu-btn round mr-3" :class="period==0?active:inactive" @tap="period=0">周</button>
-			<button class="cu-btn round mr-3" :class="period==1?active:inactive" @tap="period=1">两周</button>
-			<button class="cu-btn round mr-3" :class="period==2?active:inactive" @tap="period=2">月</button>
-		</view>
-		<view v-show="calculationOptions!=1" class="cu-form-group">
-			<view class="title">
-				目标年复合收益率
-			</view>
-			<input placeholder="请输入" v-model="expectInterest" type="digit"></input>
-			<view class="action">
-				<text>%</text>
-			</view>
-		</view>
-		<view v-show="calculationOptions!=0" class="cu-form-group">
-			<view class="title">
-				最后想拥有的总资产
-			</view>
-			<input placeholder="请输入" v-model="futureValue" type="digit"></input>
-			<view class="action">
-				<text>元</text>
+			<view v-show="calculationOptions!=0" class="cu-form-group">
+				<view class="title">
+					最后想拥有的总资产
+				</view>
+				<input placeholder="请输入" v-model="futureValue" type="digit"></input>
+				<view class="action">
+					<text>元</text>
+				</view>
 			</view>
 		</view>
 		<view class="padding mt-5">
@@ -77,8 +79,8 @@
 				fixedTime: '', //定投时长
 				expectInterest: '', //复合收益率
 				futureValue: '', //终值
-				active:'bg-green shadow-blur',//按钮活跃样式
-				inactive:'line-gray shadow'//按钮不活跃样式
+				active: 'bg-green shadow-blur', //按钮活跃样式
+				inactive: 'line-gray shadow' //按钮不活跃样式
 			}
 		},
 		methods: {
