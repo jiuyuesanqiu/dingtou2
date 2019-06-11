@@ -6,17 +6,18 @@
 				<text>请选择你想要测算的内容</text>
 			</view>
 		</view>
-		<view class="text-white">calculationOptions
+		<view class="border-bottom pb-4">
 			<view class="mb-3">
-				<button class="cu-btn round mr-3" :class="calculationOptions==0?'bg-green shadow-blur':'line-gray shadow'" @tap="calculationOptions=0">最后想拥有的总资产</button>
-				<button class="cu-btn round mr-3" :class="calculationOptions==1?'bg-green shadow-blur':'line-gray shadow'" @tap="calculationOptions=1">目标复合收益率</button>
+				<button class="cu-btn round mr-3" :class="calculationOptions==0?active:inactive" @tap="calculationOptions=0">最后想拥有的总资产</button>
+				<button class="cu-btn round mr-3" :class="calculationOptions==1?active:inactive" @tap="calculationOptions=1">目标复合收益率</button>
 			</view>
 			<view>
-				<button class="cu-btn round mr-3" :class="calculationOptions==2?'bg-green shadow-blur':'line-gray shadow'" @tap="calculationOptions=2">每期定投金额</button>
-				<button class="cu-btn round mr-3" :class="calculationOptions==3?'bg-green shadow-blur':'line-gray shadow'" @tap="calculationOptions=3">定投总时长</button>
+				<button class="cu-btn round mr-3" :class="calculationOptions==2?active:inactive" @tap="calculationOptions=2">每期定投金额</button>
+				<button class="cu-btn round mr-3" :class="calculationOptions==3?active:inactive" @tap="calculationOptions=3">定投总时长</button>
 			</view>
 		</view>
-		<view v-show="calculationOptions!=2" class="cu-form-group">
+		
+		<view v-if="calculationOptions!=2" class="cu-form-group">
 			<view class="title">
 				每期定投金额
 			</view>
@@ -38,9 +39,9 @@
 			<view class="title">
 				定投周期
 			</view>
-			<button class="cu-btn round mr-3" :class="period==0?'bg-green shadow-blur':'line-gray shadow'" @tap="period=0">周</button>
-			<button class="cu-btn round mr-3" :class="period==1?'bg-green shadow-blur':'line-gray shadow'" @tap="period=1">两周</button>
-			<button class="cu-btn round mr-3" :class="period==2?'bg-green shadow-blur':'line-gray shadow'" @tap="period=2">月</button>
+			<button class="cu-btn round mr-3" :class="period==0?active:inactive" @tap="period=0">周</button>
+			<button class="cu-btn round mr-3" :class="period==1?active:inactive" @tap="period=1">两周</button>
+			<button class="cu-btn round mr-3" :class="period==2?active:inactive" @tap="period=2">月</button>
 		</view>
 		<view v-show="calculationOptions!=1" class="cu-form-group">
 			<view class="title">
@@ -76,6 +77,8 @@
 				fixedTime: '', //定投时长
 				expectInterest: '', //复合收益率
 				futureValue: '', //终值
+				active:'bg-green shadow-blur',//按钮活跃样式
+				inactive:'line-gray shadow'//按钮不活跃样式
 			}
 		},
 		methods: {
