@@ -1,0 +1,212 @@
+<template>
+	<view class="text-df cu-card case">
+		<view class="cu-item shadow py-5">
+			<view class="text-center">
+				<view>
+					{{title.key}}
+				</view>
+				<view class="text-sl text-green">
+					<text>{{title.value}}</text>
+					<text class="text-xl">{{title.unit}}</text>
+				</view>
+			</view>
+			<view class="padding-top-xl text-xl">
+				<view v-if="parameter.option!=3" class="flex justify-between padding-lr-xl py-1">
+					<view>定投年限</view>
+					<view>
+						<text class="text-green">{{parameter.fixedTime}}</text>
+						<text>年</text>
+					</view>
+				</view>
+				<view v-if="parameter.option!=2" class="flex justify-between padding-lr-xl py-1">
+					<view>每期定投金额</view>
+					<view>
+						<text class="text-green">{{parameter.fixedMoney}}</text>
+						<text>元</text>
+					</view>
+				</view>
+				<view class="flex justify-between padding-lr-xl py-1">
+					<view>投入本金</view>
+					<view>
+						<text class="text-green">{{principal}}</text>
+						<text>元</text>
+					</view>
+				</view>
+				<view v-if="parameter.option!=0" class="flex justify-between padding-lr-xl py-1">
+					<view>最后拥有的总资产</view>
+					<view>
+						<text class="text-green">{{parameter.futureValue}}</text>
+						<text>元</text>
+					</view>
+				</view>
+				<view class="flex justify-between padding-lr-xl py-1">
+					<view>投资总收益</view>
+					<view>
+						<text class="text-green">{{totalRevenue}}</text>
+						<text>元</text>
+					</view>
+				</view>
+				<view class="flex justify-between padding-lr-xl py-1">
+					<view>总收益率</view>
+					<view>
+						<text class="text-green">{{totalYieldRate}}</text>
+						<text>%</text>
+					</view>
+				</view>
+				<view v-if="parameter.option!=1" class="flex justify-between padding-lr-xl py-1">
+					<view>目标年复合收益率</view>
+					<view>
+						<text class="text-green">{{parameter.expectInterest}}</text>
+						<text>%</text>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	let numeral = require('numeral');
+	var Finance = require('financejs');
+	var finance = new Finance();
+	numeral.defaultFormat('0,0.00');
+	export default {
+		data() {
+			return {
+				parameter: uni.getStorageSync("parameter"), //获取用户输入的计算参数
+				principal: 0, //本金
+				totalRevenue: 0, //总收益
+				totalYieldRate: 0, //总收益率
+				title: {
+					key: '',
+					value: 0,
+					unit: 0
+				}
+			}
+		},
+		onLoad() {
+			this.calculate();
+		},
+		methods: {
+			//计算
+			calculate() {
+				let option = this.parameter.option;
+				let fixedTime = this.parameter.fixedTime;
+				let fixedMoney = Number(this.parameter.fixedMoney);
+				let period = this.parameter.period;
+				let expectInterest = this.parameter.expectInterest;
+				let futureValue = Number(this.parameter.futureValue);
+				let x = 0;
+				let y = 1 / 12;
+				let z = fixedTime * 12;
+				if (period == 0) {
+					y = 1 / 52;
+					z = fixedTime * 52;
+				} else if (period == 1) {
+					y = 1 / 26;
+					z = fixedTime * 26;
+				}
+				switch (option) {
+					case 0:
+						x = Math.pow(1 + expectInterest / 100, y);
+						futureValue = (fixedMoney * x * (Math.pow(x, z) - 1)) / (x - 1);
+						this.parameter.futureValue = numeral(futureValue).format();
+						this.principal = numeral(fixedMoney * z).format(); //总本金
+						this.totalRevenue = numeral(futureValue - fixedMoney * z).format(); //总收益
+						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z)*100).format(); //总收益率
+						this.title.key = '最后拥有的总资产';
+						this.title.value = this.parameter.futureValue;
+						this.title.unit = '元';
+						break;
+					case 1:
+						let revenue = this.pmt(futureValue, fixedMoney, z, y);
+						this.principal = numeral(fixedMoney * z).format(); //总本金
+						this.totalRevenue = numeral(futureValue - fixedMoney * z).format(); //总收益
+						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z)*100).format(); //总收益率
+						this.title.key = '目标年复合收益率';
+						this.title.value = Math.floor(revenue * 10000) / 100;
+						this.title.unit = '%';
+						this.parameter.futureValue = numeral(futureValue).format();
+						break;
+					case 2:
+						x = Math.pow(1 + expectInterest / 100, y);
+						fixedMoney = (futureValue * (x - 1)) / (x * (Math.pow(x, z) - 1))
+						this.parameter.futureValue = numeral(futureValue).format();
+						this.principal = numeral(fixedMoney * z).format(); //总本金
+						this.totalRevenue = numeral(futureValue - fixedMoney * z).format(); //总收益
+						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z)*100).format(); //总收益率
+						this.title.key = '每期定投金额';
+						this.title.value = numeral(fixedMoney).format();
+						this.title.unit = '元';
+						break;
+					case 3:
+						x = Math.pow(1 + expectInterest / 100, y);
+						z = this.dealZ(futureValue, fixedMoney, x, y);
+						this.parameter.futureValue = numeral(futureValue).format();
+						this.principal = numeral(fixedMoney * z).format(); //总本金
+						this.totalRevenue = numeral(futureValue - fixedMoney * z).format(); //总收益
+						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z)*100).format(); //总收益率
+						this.title.key = '定投总时长';
+						if (period == 0) {
+							fixedTime = z / 52;
+						} else if (period == 1) {
+							fixedTime = z / 26;
+						}else{
+							fixedTime = z / 12;
+						}
+						this.title.value = Math.floor(fixedTime * 100) / 100;
+						this.title.unit = '年';
+						break;
+					default:
+						break;
+				}
+			},
+			pmt(futureValue, fixedMoney, z, y) {
+				//假设一个收益率
+				let rrate = futureValue / (z * fixedMoney);
+				let incre = Math.abs(rrate);
+
+				function isPmt() {
+					let f = (fixedMoney * rrate * (Math.pow(rrate, z) - 1)) / (rrate - 1);
+					return f > futureValue;
+				}
+				while (true) {
+					while (!isPmt()) {
+						rrate += incre;
+					}
+					if (incre < 0.000001) {
+						break;
+					}
+					rrate -= incre;
+					incre *= 1 / 2;
+				}
+				return rrate ** (1 / y) - 1;
+			},
+			dealZ(futureValue, fixedMoney, x, y) {
+				//假设一个Z
+				let z = futureValue / fixedMoney;
+				let incre = Math.abs(z);
+
+				function isZ() {
+					let f = (fixedMoney * x * (Math.pow(x, z) - 1)) / (x - 1);
+					return f > futureValue;
+				}
+				while (true) {
+					while (!isZ()) {
+						z += incre;
+					}
+					if (incre < 1) {
+						break;
+					}
+					z -= incre;
+					incre *= 1 / 2;
+				}
+				return Math.floor(z);
+			}
+		}
+	}
+</script>
+
+<style>
+
+</style>
