@@ -1,6 +1,6 @@
 <template>
-	<view class="bg-white">
-		<view class="border-bottom">
+	<view>
+		<view>
 			<view v-if="calculationOptions!=2" class="cu-form-group">
 				<view class="title">
 					每期金额
@@ -51,14 +51,13 @@
 				<view class="title">高级选项</view>
 				<switch @change="switchChange" :class="open?'checked':''" :checked="open?true:false"></switch>
 			</view>
-			<view v-show="open" class="flex justify-around py-3">
+			<view v-show="open" class="flex justify-around py-3 bg-white">
 				<button class="cu-btn" :class="calculationOptions==0?active:inactive" @tap="calculationOptions=0">算终值</button>
 				<button class="cu-btn" :class="calculationOptions==1?active:inactive" @tap="calculationOptions=1">算利率</button>
 				<button class="cu-btn" :class="calculationOptions==2?active:inactive" @tap="calculationOptions=2">算定投金额</button>
 				<button class="cu-btn" :class="calculationOptions==3?active:inactive" @tap="calculationOptions=3">算期数</button>
 			</view>
 		</view>
-		
 		<view class="padding mt-5">
 			<button class="weui-btn" type="primary" @tap="toResult">开始计算</button>
 		</view>

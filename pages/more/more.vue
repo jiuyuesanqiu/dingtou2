@@ -2,7 +2,10 @@
 	<view>
 		<nx-cell icon="/static/oneMoneySelect.png" border title="复利计算器" @tap="goCompound"></nx-cell>
 		<button open-type="contact">
-			<nx-cell icon="/static/service.png" title="意见反馈"></nx-cell>
+			<nx-cell icon="/static/service.png" border title="意见反馈"></nx-cell>
+		</button>
+		<button open-type="share">
+			<nx-cell icon="/static/share.png" title="分享给好友"></nx-cell>
 		</button>
 	</view>
 </template>
@@ -21,7 +24,13 @@
 				wx.navigateToMiniProgram({
 					appId: 'wx02b9db6b7396855d'
 				})
-			}
+			},
+			onShareAppMessage() {
+				return {
+					title: '定投计算器',
+					path: '/pages/index/index'
+				}
+			},
 		}
 	}
 </script>

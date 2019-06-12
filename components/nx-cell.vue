@@ -7,7 +7,7 @@
 			<view class="flex-grow-1">
 				<text>{{title}}</text>
 			</view>
-			<text color="#888888" class="cuIcon-right"></text>
+			<text class="cuIcon-right text-gray"></text>
 		</view>
 	</view>
 </template>

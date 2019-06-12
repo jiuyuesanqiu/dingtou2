@@ -8,6 +8,10 @@
 	@import "common/main.css";
 	@import "common/icon.css";
 	@import "common/bootstrap.wxss";
+	page {
+		background-color: #f7f7f7;
+	}
+	
 	.text-primary {
 		color: #09bb07 !important;
 	}
