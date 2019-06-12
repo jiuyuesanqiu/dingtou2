@@ -1,59 +1,59 @@
 <template>
-	<view class="text-df cu-card case">
-		<view class="cu-item shadow py-5">
+	<view class="text-df cu-card">
+		<view class="cu-item p-5">
 			<view class="text-center">
-				<view>
+				<view class="p-3 text-xl">
 					{{title.key}}
 				</view>
-				<view class="text-sl text-green">
-					<text>{{title.value}}</text>
+				<view class="text-green">
+					<text :class="isLong?'text-small':'text-sl'">{{title.value}}</text>
 					<text class="text-xl">{{title.unit}}</text>
 				</view>
 			</view>
-			<view class="padding-top-xl text-xl">
-				<view v-if="parameter.option!=3" class="flex justify-between padding-lr-xl py-1">
+			<view class="text-lg mt-3 text-gray">
+				<view v-if="parameter.option!=3" class="flex justify-between py-1">
 					<view>定投期数</view>
 					<view>
 						<text class="text-green">{{parameter.fixedTime}}</text>
 						<text>年</text>
 					</view>
 				</view>
-				<view v-if="parameter.option!=2" class="flex justify-between padding-lr-xl py-1">
+				<view v-if="parameter.option!=2" class="flex justify-between py-1">
 					<view>每期金额</view>
 					<view>
 						<text class="text-green">{{parameter.fixedMoney}}</text>
 						<text>元</text>
 					</view>
 				</view>
-				<view class="flex justify-between padding-lr-xl py-1">
+				<view class="flex justify-between py-1">
 					<view>投入本金</view>
 					<view>
 						<text class="text-green">{{principal}}</text>
 						<text>元</text>
 					</view>
 				</view>
-				<view v-if="parameter.option!=0" class="flex justify-between padding-lr-xl py-1">
+				<view v-if="parameter.option!=0" class="flex justify-between py-1">
 					<view>期末资产</view>
 					<view>
 						<text class="text-green">{{parameter.futureValue}}</text>
 						<text>元</text>
 					</view>
 				</view>
-				<view class="flex justify-between padding-lr-xl py-1">
+				<view class="flex justify-between py-1">
 					<view>总收益</view>
 					<view>
 						<text class="text-green">{{totalRevenue}}</text>
 						<text>元</text>
 					</view>
 				</view>
-				<view class="flex justify-between padding-lr-xl py-1">
+				<view class="flex justify-between py-1">
 					<view>总收益率</view>
 					<view>
 						<text class="text-green">{{totalYieldRate}}</text>
 						<text>%</text>
 					</view>
 				</view>
-				<view v-if="parameter.option!=1" class="flex justify-between padding-lr-xl py-1">
+				<view v-if="parameter.option!=1" class="flex justify-between py-1">
 					<view>年收益率</view>
 					<view>
 						<text class="text-green">{{parameter.expectInterest}}</text>
@@ -62,6 +62,11 @@
 				</view>
 			</view>
 		</view>
+		<view class="padding mt-5">
+			<button class="weui-btn" type="primary" open-type="share">去分享</button>
+			<button class="weui-btn" type="default" @tap="goHome">回到首页</button>
+		</view>
+		
 	</view>
 </template>
 
@@ -84,10 +89,32 @@
 				}
 			}
 		},
-		onLoad() {
+		computed: {
+			isLong() {
+				let s = this.title.value + '';
+				return s.length > 12;
+			}
+		},
+		onLoad(option) {
+			if(option.parameter !=undefined){
+				this.parameter = JSON.parse(option.parameter);
+				console.log(2343)
+			}
 			this.calculate();
 		},
 		methods: {
+			//回到首页
+			goHome(){
+				uni.redirectTo({
+					url: '/pages/index/index'
+				});
+			},
+			onShareAppMessage() {
+				return {
+					title: '定投计算器',
+					path: `/pages/result/result?parameter=${JSON.stringify(this.parameter)}`
+				}
+			},
 			//计算
 			calculate() {
 				let option = this.parameter.option;
@@ -113,7 +140,7 @@
 						this.parameter.futureValue = numeral(futureValue).format();
 						this.principal = numeral(fixedMoney * z).format(); //总本金
 						this.totalRevenue = numeral(futureValue - fixedMoney * z).format(); //总收益
-						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z)*100).format(); //总收益率
+						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z) * 100).format(); //总收益率
 						this.title.key = '期末总资产';
 						this.title.value = this.parameter.futureValue;
 						this.title.unit = '元';
@@ -122,7 +149,7 @@
 						let revenue = this.pmt(futureValue, fixedMoney, z, y);
 						this.principal = numeral(fixedMoney * z).format(); //总本金
 						this.totalRevenue = numeral(futureValue - fixedMoney * z).format(); //总收益
-						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z)*100).format(); //总收益率
+						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z) * 100).format(); //总收益率
 						this.title.key = '年复合收益率';
 						this.title.value = Math.floor(revenue * 10000) / 100;
 						this.title.unit = '%';
@@ -134,7 +161,7 @@
 						this.parameter.futureValue = numeral(futureValue).format();
 						this.principal = numeral(fixedMoney * z).format(); //总本金
 						this.totalRevenue = numeral(futureValue - fixedMoney * z).format(); //总收益
-						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z)*100).format(); //总收益率
+						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z) * 100).format(); //总收益率
 						this.title.key = '每期定投金额';
 						this.title.value = numeral(fixedMoney).format();
 						this.title.unit = '元';
@@ -145,13 +172,13 @@
 						this.parameter.futureValue = numeral(futureValue).format();
 						this.principal = numeral(fixedMoney * z).format(); //总本金
 						this.totalRevenue = numeral(futureValue - fixedMoney * z).format(); //总收益
-						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z)*100).format(); //总收益率
+						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z) * 100).format(); //总收益率
 						this.title.key = '定投总时长';
 						if (period == 0) {
 							fixedTime = z / 52;
 						} else if (period == 1) {
 							fixedTime = z / 26;
-						}else{
+						} else {
 							fixedTime = z / 12;
 						}
 						this.title.value = Math.floor(fixedTime * 100) / 100;
@@ -208,5 +235,7 @@
 </script>
 
 <style>
-
+	.text-small {
+		font-size: 60upx;
+	}
 </style>
