@@ -66,7 +66,6 @@
 			<button class="weui-btn" type="primary" open-type="share">去分享</button>
 			<button class="weui-btn" type="default" @tap="goHome">回到首页</button>
 		</view>
-		
 	</view>
 </template>
 
@@ -96,7 +95,7 @@
 			}
 		},
 		onLoad(option) {
-			if(option.parameter !=undefined){
+			if (option.parameter != undefined) {
 				this.parameter = JSON.parse(option.parameter);
 				console.log(2343)
 			}
@@ -104,8 +103,8 @@
 		},
 		methods: {
 			//回到首页
-			goHome(){
-				uni.redirectTo({
+			goHome() {
+				uni.switchTab({
 					url: '/pages/index/index'
 				});
 			},

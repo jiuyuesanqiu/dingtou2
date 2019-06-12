@@ -58,6 +58,7 @@
         "setting" : {
             "urlCheck" : false
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+		"navigateToMiniProgramAppIdList":["wx02b9db6b7396855d"]
     }
 }
