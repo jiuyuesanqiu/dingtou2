@@ -12,14 +12,14 @@
 			</view>
 			<view class="padding-top-xl text-xl">
 				<view v-if="parameter.option!=3" class="flex justify-between padding-lr-xl py-1">
-					<view>定投年限</view>
+					<view>定投期数</view>
 					<view>
 						<text class="text-green">{{parameter.fixedTime}}</text>
 						<text>年</text>
 					</view>
 				</view>
 				<view v-if="parameter.option!=2" class="flex justify-between padding-lr-xl py-1">
-					<view>每期定投金额</view>
+					<view>每期金额</view>
 					<view>
 						<text class="text-green">{{parameter.fixedMoney}}</text>
 						<text>元</text>
@@ -33,14 +33,14 @@
 					</view>
 				</view>
 				<view v-if="parameter.option!=0" class="flex justify-between padding-lr-xl py-1">
-					<view>最后拥有的总资产</view>
+					<view>期末资产</view>
 					<view>
 						<text class="text-green">{{parameter.futureValue}}</text>
 						<text>元</text>
 					</view>
 				</view>
 				<view class="flex justify-between padding-lr-xl py-1">
-					<view>投资总收益</view>
+					<view>总收益</view>
 					<view>
 						<text class="text-green">{{totalRevenue}}</text>
 						<text>元</text>
@@ -54,7 +54,7 @@
 					</view>
 				</view>
 				<view v-if="parameter.option!=1" class="flex justify-between padding-lr-xl py-1">
-					<view>目标年复合收益率</view>
+					<view>年收益率</view>
 					<view>
 						<text class="text-green">{{parameter.expectInterest}}</text>
 						<text>%</text>
@@ -114,7 +114,7 @@
 						this.principal = numeral(fixedMoney * z).format(); //总本金
 						this.totalRevenue = numeral(futureValue - fixedMoney * z).format(); //总收益
 						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z)*100).format(); //总收益率
-						this.title.key = '最后拥有的总资产';
+						this.title.key = '期末总资产';
 						this.title.value = this.parameter.futureValue;
 						this.title.unit = '元';
 						break;
@@ -123,7 +123,7 @@
 						this.principal = numeral(fixedMoney * z).format(); //总本金
 						this.totalRevenue = numeral(futureValue - fixedMoney * z).format(); //总收益
 						this.totalYieldRate = numeral((futureValue - fixedMoney * z) / (fixedMoney * z)*100).format(); //总收益率
-						this.title.key = '目标年复合收益率';
+						this.title.key = '年复合收益率';
 						this.title.value = Math.floor(revenue * 10000) / 100;
 						this.title.unit = '%';
 						this.parameter.futureValue = numeral(futureValue).format();

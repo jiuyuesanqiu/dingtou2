@@ -31,7 +31,7 @@
 			</view>
 			<view v-show="calculationOptions!=1" class="cu-form-group">
 				<view class="title">
-					收益率
+					年收益率
 				</view>
 				<input placeholder="请输入年复合收益率" v-model="expectInterest" type="digit"></input>
 				<view class="action">
