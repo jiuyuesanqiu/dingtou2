@@ -5,14 +5,13 @@
 			"style": {
 				"navigationBarTitleText": "定投计算器"
 			}
-		}
-	    ,{
-            "path" : "pages/result/result",
-            "style" : {
+		}, {
+			"path": "pages/result/result",
+			"style": {
 				"navigationBarTitleText": "计算结果"
 			}
-        }
-    ],
+		}
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

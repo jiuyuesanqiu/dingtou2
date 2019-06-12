@@ -1,16 +1,16 @@
 {
-  "name": "dingtou2",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "financejs": "^4.1.0",
-    "numeral": "^2.0.6"
-  }
+	"name": "dingtou2",
+	"version": "1.0.0",
+	"description": "",
+	"main": "main.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"financejs": "^4.1.0",
+		"numeral": "^2.0.6"
+	}
 }

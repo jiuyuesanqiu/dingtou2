@@ -1,37 +1,20 @@
 <template>
 	<view class="bg-white">
-		<view class="cu-bar">
-			<view class="action">
-				<text class="cuIcon-title text-green"></text>
-				<text>请选择你想要测算的内容</text>
-			</view>
-		</view>
-		<view class="border-bottom pb-4">
-			<view class="mb-3">
-				<button class="cu-btn round mr-3" :class="calculationOptions==0?active:inactive" @tap="calculationOptions=0">最后想拥有的总资产</button>
-				<button class="cu-btn round mr-3" :class="calculationOptions==1?active:inactive" @tap="calculationOptions=1">目标复合收益率</button>
-			</view>
-			<view>
-				<button class="cu-btn round mr-3" :class="calculationOptions==2?active:inactive" @tap="calculationOptions=2">每期定投金额</button>
-				<button class="cu-btn round mr-3" :class="calculationOptions==3?active:inactive" @tap="calculationOptions=3">定投总时长</button>
-			</view>
-		</view>
-
 		<view class="border-bottom">
 			<view v-if="calculationOptions!=2" class="cu-form-group">
 				<view class="title">
-					每期定投金额
+					每期金额
 				</view>
-				<input placeholder="请输入" v-model="fixedMoney" type="digit"></input>
+				<input placeholder="请输入每期定投金额" v-model="fixedMoney" type="digit"></input>
 				<view class="action">
 					<text>元</text>
 				</view>
 			</view>
 			<view v-show="calculationOptions!=3" class="cu-form-group">
 				<view class="title">
-					总定投时长
+					定投期数
 				</view>
-				<input placeholder="请输入" v-model="fixedTime" type="digit"></input>
+				<input placeholder="请输入你要定投的总期数" v-model="fixedTime" type="digit"></input>
 				<view class="action">
 					<text>年</text>
 				</view>
@@ -40,29 +23,42 @@
 				<view class="title">
 					定投周期
 				</view>
-				<button class="cu-btn round mr-3" :class="period==0?active:inactive" @tap="period=0">周</button>
-				<button class="cu-btn round mr-3" :class="period==1?active:inactive" @tap="period=1">两周</button>
-				<button class="cu-btn round mr-3" :class="period==2?active:inactive" @tap="period=2">月</button>
+				<view class="flex justify-around flex-grow-1">
+					<button class="cu-btn" :class="period==0?active:inactive" @tap="period=0">每周</button>
+					<button class="cu-btn" :class="period==1?active:inactive" @tap="period=1">每两周</button>
+					<button class="cu-btn" :class="period==2?active:inactive" @tap="period=2">每月</button>
+				</view>
 			</view>
 			<view v-show="calculationOptions!=1" class="cu-form-group">
 				<view class="title">
-					目标年复合收益率
+					收益率
 				</view>
-				<input placeholder="请输入" v-model="expectInterest" type="digit"></input>
+				<input placeholder="请输入年复合收益率" v-model="expectInterest" type="digit"></input>
 				<view class="action">
 					<text>%</text>
 				</view>
 			</view>
 			<view v-show="calculationOptions!=0" class="cu-form-group">
 				<view class="title">
-					最后想拥有的总资产
+					期末资产
 				</view>
-				<input placeholder="请输入" v-model="futureValue" type="digit"></input>
+				<input placeholder="请输入期末总资产" v-model="futureValue" type="digit"></input>
 				<view class="action">
 					<text>元</text>
 				</view>
 			</view>
+			<view class="cu-form-group">
+				<view class="title">高级选项</view>
+				<switch @change="switchChange" :class="open?'checked':''" :checked="open?true:false"></switch>
+			</view>
+			<view v-show="open" class="flex justify-around py-3">
+				<button class="cu-btn" :class="calculationOptions==0?active:inactive" @tap="calculationOptions=0">算终值</button>
+				<button class="cu-btn" :class="calculationOptions==1?active:inactive" @tap="calculationOptions=1">算利率</button>
+				<button class="cu-btn" :class="calculationOptions==2?active:inactive" @tap="calculationOptions=2">算定投金额</button>
+				<button class="cu-btn" :class="calculationOptions==3?active:inactive" @tap="calculationOptions=3">算期数</button>
+			</view>
 		</view>
+		
 		<view class="padding mt-5">
 			<button class="weui-btn" type="primary" @tap="toResult">开始计算</button>
 		</view>
@@ -80,10 +76,14 @@
 				expectInterest: '', //复合收益率
 				futureValue: '', //终值
 				active: 'bg-green shadow-blur', //按钮活跃样式
-				inactive: 'line-gray shadow' //按钮不活跃样式
+				inactive: 'line-gray shadow', //按钮不活跃样式
+				open: false
 			}
 		},
 		methods: {
+			switchChange(e) {
+				this.open = e.detail.value;
+			},
 			/**
 			 * 跳转计算结果页面
 			 */
@@ -196,6 +196,6 @@
 <style>
 	/* 防止表单标题长短不一 */
 	.cu-form-group .title {
-		min-width: 300upx;
+		min-width: 200upx;
 	}
 </style>
