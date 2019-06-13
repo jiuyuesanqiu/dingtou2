@@ -97,7 +97,6 @@
 		onLoad(option) {
 			if (option.parameter != undefined) {
 				this.parameter = JSON.parse(option.parameter);
-				console.log(2343)
 			}
 			this.calculate();
 		},
