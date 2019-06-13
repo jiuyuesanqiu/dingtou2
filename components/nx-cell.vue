@@ -1,9 +1,9 @@
 <template>
-	<view class="d-flex fuli-cell" hover-class="fuli-cell-active">
-		<view class="fuli-cell-left d-flex align-items-center">
-			<image class="fuli-cell-icon" :src="icon"></image>
+	<view class="d-flex nx-cell" hover-class="nx-cell-active">
+		<view class="nx-cell-left d-flex align-items-center">
+			<image class="nx-cell-icon" :src="icon"></image>
 		</view>
-		<view class="fuli-cell-right flex-grow-1 d-flex" :class="border?'border-b':''">
+		<view class="nx-cell-right flex-grow-1 d-flex" :class="border?'border-b':''">
 			<view class="flex-grow-1">
 				<text>{{title}}</text>
 			</view>
@@ -26,36 +26,35 @@
 				type: Boolean,
 				value: true
 			}
-		},
-		methods: {}
+		}
 	}
 </script>
 
-<style>
-	.fuli-cell {
+<style scoped>
+	.nx-cell {
 		background: white;
 		color: #353535;
 	}
 
-	.fuli-cell-left {
-		padding: 31rpx 36rpx;
+	.nx-cell-left {
+		padding: 31upx 36upx;
 	}
 
-	.fuli-cell-right {
-		font-size: 36rpx;
-		padding: 31rpx 26rpx 31rpx 0;
+	.nx-cell-right {
+		font-size: 36upx;
+		padding: 31upx 26upx 31upx 0;
 	}
 
-	.fuli-cell-icon {
-		width: 40rpx;
-		height: 40rpx;
+	.nx-cell-icon {
+		width: 40upx;
+		height: 40upx;
 	}
 
-	.fuli-cell-active {
+	.nx-cell-active {
 		background-color: #e5e5e5;
 	}
 
 	.border-b {
-		border-bottom: 1rpx solid #eee;
+		border-bottom: 1upx solid #eee;
 	}
 </style>
